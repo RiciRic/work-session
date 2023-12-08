@@ -6,10 +6,11 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { useTheme } from "@mui/material/styles";
 
 import createUniqueId from "../files/createUniqueId";
+import ProjectType from "../types/ProjectType";
 
 interface Props {
-  projects: any[];
-  setProjects: (projects: any) => void;
+  projects: ProjectType[];
+  setProjects: any;
   handleChange: (value: any) => void;
   handleClose: () => void;
   open: boolean;
@@ -23,12 +24,12 @@ function AddProject(props: Props) {
   const [disabled, setDisabled] = React.useState(true);
 
   const handleAddProject = () => {
-    const newElement = {
+    const newElement: ProjectType = {
       id: createUniqueId(),
       name: value,
       color: theme.palette.primary.main,
     };
-    props.setProjects((oldArray: any) => [...oldArray, newElement]);
+    props.setProjects((oldArray: ProjectType[]) => [...oldArray, newElement]);
 
     const projectsLength = props.projects.length;
     props.handleChange(props.projects[projectsLength - 1]);

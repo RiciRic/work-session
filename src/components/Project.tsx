@@ -22,11 +22,12 @@ import ColorPicker from "./ColorPicker";
 import AddProject from "./AddProject";
 
 import { useTheme } from "@mui/material/styles";
+import ProjectType from "../types/ProjectType";
 
 interface Props {
-  projects: any;
-  setProjects: (projects: any) => void;
-  toggleDrawer: (event: any) => void;
+  projects: ProjectType[];
+  setProjects: (projects: ProjectType[]) => void;
+  toggleDrawer: (event: React.KeyboardEvent | React.MouseEvent) => void;
   open: boolean;
 }
 
@@ -37,7 +38,7 @@ function Project(props: Props) {
   const [selectFirstElement, setsSelectFirstElement] = React.useState(true);
   const [disabled, setDisabled] = React.useState(true);
 
-  const [project, setProject] = React.useState("");
+  const [project, setProject] = React.useState<ProjectType>({id: '1', name: '1', color: '#1e1e1e'});
   const [projectId, setProjectId] = React.useState("");
   const [projectName, setProjectName] = React.useState("");
   const [projectColor, setProjectColor] = React.useState(
@@ -45,7 +46,7 @@ function Project(props: Props) {
   );
   const [addProject, setAddProject] = React.useState(false);
 
-  const handleChange = (value: any) => {
+  const handleChange = (value: ProjectType) => {
     console.log(value);
     setProject(value);
     setProjectId(value.id);
@@ -70,9 +71,11 @@ function Project(props: Props) {
     console.log(projectColor);
   }, [projectColor, projectColor]);
 
-  const handleSave = (event: any) => {
-    let arrayToChange: any = [...props.projects];
-    let elementToChange = arrayToChange.find((x: any) => x.id === projectId);
+  const handleSave = (event: React.KeyboardEvent | React.MouseEvent) => {
+    let arrayToChange: ProjectType[] = [...props.projects];
+    let elementToChange: any = arrayToChange.find(
+      (x: ProjectType) => x.id === projectId
+    );
     elementToChange.name = projectName;
     elementToChange.color = projectColor;
     props.setProjects(arrayToChange);
@@ -81,7 +84,7 @@ function Project(props: Props) {
     setsSelectFirstElement(true);
   };
 
-  const handleCancel = (event: any) => {
+  const handleCancel = (event: React.KeyboardEvent | React.MouseEvent) => {
     handleChange(props.projects[0]);
     props.toggleDrawer(event);
     setDisabled(true);
@@ -90,7 +93,7 @@ function Project(props: Props) {
 
   const handleDelete = () => {
     props.setProjects([
-      ...props.projects.filter((item: any) => item.id !== projectId),
+      ...props.projects.filter((item: ProjectType) => item.id !== projectId),
     ]);
   };
 
@@ -135,7 +138,7 @@ function Project(props: Props) {
               placeholder="Projekt"
               value={project}
               onChange={(event) => {
-                handleChange(event.target.value);
+                handleChange(event.target.value as ProjectType);
               }}
             >
               {props.projects.map((project: any, index: number) => {

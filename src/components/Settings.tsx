@@ -17,7 +17,7 @@ import { exit } from "@tauri-apps/api/process";
 
 interface Props {
   open: boolean;
-  toggleDrawer: (event: any) => void;
+  toggleDrawer: (event: React.KeyboardEvent | React.MouseEvent) => void;
 }
 
 function Settings(props: Props) {

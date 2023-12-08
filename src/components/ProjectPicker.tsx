@@ -1,8 +1,9 @@
 import React from "react";
 import { FormControl, Select, MenuItem } from "@mui/material";
+import ProjectType from "../types/ProjectType";
 
 interface Props {
-  projects: any;
+  projects: ProjectType[];
 }
 
 function ProjectPicker(props: Props) {

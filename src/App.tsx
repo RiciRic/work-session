@@ -10,14 +10,13 @@ import Menu from "./components/Menu";
 
 //import { window } from "@neutralinojs/lib";
 
-//import "./files/trayIcon";
-
 import "./css/transitionIn.css";
+import ProjectType from "./types/ProjectType";
 
 function App() {
   const [date, setDate] = useState(new Date());
 
-  const [projects, setProjects] = useState([
+  const [projects, setProjects] = useState<ProjectType[]>([
     { id: "1", name: "adesso Staffing Advisor", color: "#1976d2" },
     { id: "2", name: "CC", color: "#8119d2" },
   ]);

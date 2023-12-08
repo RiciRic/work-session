@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Paper, Divider } from "@mui/material";
 
 import getWeek from "../files/getWeek";
@@ -6,9 +6,11 @@ import getWeek from "../files/getWeek";
 import Day from "./Day";
 import ProjectPicker from "./ProjectPicker";
 import DatePicker from "./DatePicker";
+import ProjectType from "../types/ProjectType";
+import { DataType } from "../types/SessionType";
 
 interface Props {
-  projects: any;
+  projects: ProjectType[];
   date: Date;
   setDate: (date: Date) => void;
 }
@@ -16,7 +18,7 @@ interface Props {
 function Calendar(props: Props) {
   const [week, setWeek] = React.useState(getWeek(props.date));
 
-  const data = {
+  const [data, setData] = useState<DataType>({
     monday: [
       {
         project: "projekt1",
@@ -39,7 +41,6 @@ function Calendar(props: Props) {
         end: "2",
         color: "#1976d2",
       },
-      ,
     ],
     tuesday: [
       {
@@ -63,7 +64,7 @@ function Calendar(props: Props) {
     friday: [],
     saturday: [],
     sunday: [],
-  };
+  });
 
   useEffect(() => {
     setWeek(getWeek(props.date));

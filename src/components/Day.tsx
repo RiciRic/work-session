@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Divider, Typography } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
+import SessionType, { DataType } from "../types/SessionType";
 
 interface Props {
   date: Date;

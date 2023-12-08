@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 import "dayjs/locale/de";
 import dayjs from "dayjs";
+import { Dayjs } from "dayjs";
 
 import {
   Modal,
@@ -55,7 +56,7 @@ interface Props {
 }
 
 function DatePicker(props: Props) {
-  const [value, setValue] = React.useState(dayjs());
+  const [value, setValue] = React.useState<Dayjs>(dayjs());
 
   const [startWeek, setStartWeek] = React.useState("");
   const [endWeek, setEndWeek] = React.useState("");
@@ -64,9 +65,11 @@ function DatePicker(props: Props) {
   );*/
 
   useEffect(() => {
-    const week = getWeek(new Date(value.toISOString()));
-    setStartWeek(dateToString(week[0]));
-    setEndWeek(dateToString(week[6]));
+    if (value !== null) {
+      const week = getWeek(new Date(value.toISOString()));
+      setStartWeek(dateToString(week[0]));
+      setEndWeek(dateToString(week[6]));
+    }
   }, [value]);
 
   const [open, setOpen] = React.useState(false);
@@ -149,8 +152,10 @@ function DatePicker(props: Props) {
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
               <StaticDatePicker
                 value={value}
-                onChange={(value: any) => {
-                  setValue(value);
+                onChange={(value) => {
+                  if (value !== null) {
+                    setValue(value);
+                  }
                 }}
                 slotProps={{
                   layout: {

@@ -8,10 +8,16 @@ import Settings from "./Settings";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "@mui/icons-material/Link";
+import CloseIcon from "@mui/icons-material/Close";
 
 import Project from "./Project";
 
 import openAdTime from "../files/openAdTime";
+import ProjectType from "../types/ProjectType";
+
+import { exit } from "@tauri-apps/api/process";
+
+import { useTheme } from "@mui/material/styles";
 
 const StyledSpeedDial = styled(SpeedDial)(() => ({
   position: "absolute",
@@ -21,11 +27,12 @@ const StyledSpeedDial = styled(SpeedDial)(() => ({
 }));
 
 interface Props {
-  projects: any;
-  setProjects: (projects: any) => void;
+  projects: ProjectType[];
+  setProjects: (projects: ProjectType[]) => void;
 }
 
 function Menu(props: Props) {
+  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -33,10 +40,14 @@ function Menu(props: Props) {
   const [openSettings, setOpenSettings] = React.useState(false);
   const [openProject, setOpenProject] = React.useState(false);
 
-  const toggleDrawerSettings = (event: any) => {
+  const toggleDrawerSettings = (
+    event: React.KeyboardEvent | React.MouseEvent
+  ) => {
     if (
+      event &&
       event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
+      ((event as React.KeyboardEvent).key === "Tab" ||
+        (event as React.KeyboardEvent).key === "Shift")
     ) {
       return;
     }
@@ -47,10 +58,14 @@ function Menu(props: Props) {
     }
   };
 
-  const toggleDrawerProject = (event: any) => {
+  const toggleDrawerProject = (
+    event: React.KeyboardEvent | React.MouseEvent
+  ) => {
     if (
+      event &&
       event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
+      ((event as React.KeyboardEvent).key === "Tab" ||
+        (event as React.KeyboardEvent).key === "Shift")
     ) {
       return;
     }
@@ -85,6 +100,12 @@ function Menu(props: Props) {
           icon={<EditIcon />}
           tooltipTitle={"Projekte bearbeiten"}
           onClick={toggleDrawerProject}
+        />
+        <SpeedDialAction
+          //sx={{ color: theme.palette.warning.main }}
+          icon={<CloseIcon />}
+          tooltipTitle={"Beenden"}
+          onClick={() => exit(1)}
         />
       </StyledSpeedDial>
       <Settings open={openSettings} toggleDrawer={toggleDrawerSettings} />
