@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Box, FormControl, Button, Typography } from "@mui/material";
 
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -6,14 +6,16 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { useTheme } from "@mui/material/styles";
 
 import createUniqueId from "../files/createUniqueId";
-import ProjectType from "../types/ProjectType";
+import ProjectType, { ProjectArrayType } from "../types/ProjectType";
+import { saveProjects } from "../files/store";
 
 interface Props {
-  projects: ProjectType[];
+  projects: ProjectArrayType;
   setProjects: any;
   handleChange: (value: any) => void;
   handleClose: () => void;
   open: boolean;
+  exitable: boolean;
 }
 
 function AddProject(props: Props) {
@@ -29,15 +31,26 @@ function AddProject(props: Props) {
       name: value,
       color: theme.palette.primary.main,
     };
-    props.setProjects((oldArray: ProjectType[]) => [...oldArray, newElement]);
+    console.log(newElement);
+    const newProjects: ProjectArrayType = [...props.projects, newElement];
+    //props.setProjects((oldArray: ProjectType[]) => [...oldArray, newElement]);
+    props.setProjects(newProjects);
+    saveProjects(newProjects);
 
     const projectsLength = props.projects.length;
     props.handleChange(props.projects[projectsLength - 1]);
     setValue("");
     props.handleClose();
   };
+
+  const handleClose = () => {
+    if (props.exitable) {
+      props.handleClose();
+    }
+  };
+
   return (
-    <Modal open={props.open} onClose={props.handleClose}>
+    <Modal open={props.open} onClose={handleClose}>
       <Box
         sx={{
           position: "absolute",
@@ -81,9 +94,11 @@ function AddProject(props: Props) {
           >
             hinzufügen
           </Button>
-          <Button variant="text" onClick={props.handleClose}>
-            abbrechen
-          </Button>
+          {props.exitable && (
+            <Button variant="text" onClick={handleClose}>
+              abbrechen
+            </Button>
+          )}
         </div>
       </Box>
     </Modal>

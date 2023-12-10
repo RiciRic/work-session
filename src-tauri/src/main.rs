@@ -3,9 +3,19 @@
 
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri_plugin_autostart::MacosLauncher;
+
+#[tauri::command]
+#[allow(unused_variables)]
+fn get_path_to_exe() -> String {
+    match std::env::current_exe() {
+        Ok(exe_path) => return exe_path.display().to_string(),
+        Err(e) => return "failed to get current exe path: {e}".to_string(),
+    };
+    //"Hello from Rust!".into()
+}
 
 fn main() {
-    // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
     let show = CustomMenuItem::new("show".to_string(), "Öffnen");
     let quit = CustomMenuItem::new("quit".to_string(), "Schließen");
     let tray_menu = SystemTrayMenu::new()
@@ -64,6 +74,8 @@ fn main() {
             _ => {}
         }) //additional code for tauri
         .plugin(tauri_plugin_store::Builder::default().build())
+        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"]) /* arbitrary number of args to pass to your app */))
+        .invoke_handler(tauri::generate_handler![get_path_to_exe])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,4 +1,4 @@
-//import React from "react";
+import React, { useEffect } from "react";
 import {
   Drawer,
   Typography,
@@ -15,6 +15,10 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 import { exit } from "@tauri-apps/api/process";
 
+import { invoke } from "@tauri-apps/api/tauri";
+
+import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
+
 interface Props {
   open: boolean;
   toggleDrawer: (event: React.KeyboardEvent | React.MouseEvent) => void;
@@ -22,6 +26,30 @@ interface Props {
 
 function Settings(props: Props) {
   const anchor = "left";
+
+  const [startup, setStartup] = React.useState(true);
+
+  const changeAutoStart = async (startup: boolean) => {
+    if (startup) {
+      await enable();
+    } else {
+      disable();
+    }
+  };
+
+  const getAutoStart = async () => {
+    const value = await isEnabled();
+    setStartup(value);
+  };
+
+  useEffect(() => {
+    invoke("get_path_to_exe").then((path) => console.log(path));
+    changeAutoStart(startup);
+  }, [startup]);
+
+  useEffect(() => {
+    getAutoStart();
+  }, []);
 
   return (
     <Drawer
@@ -52,7 +80,12 @@ function Settings(props: Props) {
         <Divider flexItem />
         <FormGroup>
           <FormControlLabel
-            control={<Switch defaultChecked />}
+            control={
+              <Switch
+                value={startup}
+                onChange={(event) => setStartup(event.target.checked)}
+              />
+            }
             label="Beim Hochfahren starten"
           />
         </FormGroup>

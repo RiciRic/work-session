@@ -22,13 +22,15 @@ import ColorPicker from "./ColorPicker";
 import AddProject from "./AddProject";
 
 import { useTheme } from "@mui/material/styles";
-import ProjectType from "../types/ProjectType";
+import ProjectType, { ProjectArrayType } from "../types/ProjectType";
+import { saveProjects } from "../files/store";
 
 interface Props {
-  projects: ProjectType[];
-  setProjects: (projects: ProjectType[]) => void;
+  projects: ProjectArrayType;
+  setProjects: (projects: ProjectArrayType) => void;
   toggleDrawer: (event: React.KeyboardEvent | React.MouseEvent) => void;
   open: boolean;
+  setAddProject: (addProjects: boolean) => void;
 }
 
 function Project(props: Props) {
@@ -38,7 +40,11 @@ function Project(props: Props) {
   const [selectFirstElement, setsSelectFirstElement] = React.useState(true);
   const [disabled, setDisabled] = React.useState(true);
 
-  const [project, setProject] = React.useState<ProjectType>({id: '1', name: '1', color: '#1e1e1e'});
+  const [project, setProject] = React.useState<ProjectType>({
+    id: "1",
+    name: "1",
+    color: "#1e1e1e",
+  });
   const [projectId, setProjectId] = React.useState("");
   const [projectName, setProjectName] = React.useState("");
   const [projectColor, setProjectColor] = React.useState(
@@ -48,10 +54,12 @@ function Project(props: Props) {
 
   const handleChange = (value: ProjectType) => {
     console.log(value);
-    setProject(value);
-    setProjectId(value.id);
-    setProjectName(value.name);
-    setProjectColor(value.color);
+    if (value) {
+      setProject(value);
+      setProjectId(value.id);
+      setProjectName(value.name);
+      setProjectColor(value.color);
+    }
   };
 
   useEffect(() => {
@@ -72,13 +80,14 @@ function Project(props: Props) {
   }, [projectColor, projectColor]);
 
   const handleSave = (event: React.KeyboardEvent | React.MouseEvent) => {
-    let arrayToChange: ProjectType[] = [...props.projects];
+    let arrayToChange: ProjectArrayType = [...props.projects];
     let elementToChange: any = arrayToChange.find(
       (x: ProjectType) => x.id === projectId
     );
     elementToChange.name = projectName;
     elementToChange.color = projectColor;
     props.setProjects(arrayToChange);
+    saveProjects(arrayToChange);
     props.toggleDrawer(event);
     setDisabled(true);
     setsSelectFirstElement(true);
@@ -92,9 +101,14 @@ function Project(props: Props) {
   };
 
   const handleDelete = () => {
-    props.setProjects([
+    const newProjects: ProjectArrayType = [
       ...props.projects.filter((item: ProjectType) => item.id !== projectId),
-    ]);
+    ];
+    props.setProjects(newProjects);
+    saveProjects(newProjects);
+    if (newProjects.length == 0) {
+      props.setAddProject(true);
+    }
   };
 
   return (
@@ -161,6 +175,7 @@ function Project(props: Props) {
             projects={props.projects}
             setProjects={props.setProjects}
             handleChange={handleChange}
+            exitable={true}
           />
         </div>
 

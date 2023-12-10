@@ -1,3 +1,4 @@
 export default function createUniqueId() {
-  return "" + Date.now();
+  const date = new Date();
+  return "" + date.getTime();
 }

@@ -6,11 +6,11 @@ import getWeek from "../files/getWeek";
 import Day from "./Day";
 import ProjectPicker from "./ProjectPicker";
 import DatePicker from "./DatePicker";
-import ProjectType from "../types/ProjectType";
+import { ProjectArrayType } from "../types/ProjectType";
 import { DataType } from "../types/SessionType";
 
 interface Props {
-  projects: ProjectType[];
+  projects: ProjectArrayType;
   date: Date;
   setDate: (date: Date) => void;
 }

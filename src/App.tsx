@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button, Typography } from "@mui/material";
 import CalendarWeek from "./components/CalendarWeek";
@@ -8,18 +8,34 @@ import Warning from "./components/Warning";
 import Timer from "./components/Timer";
 import Menu from "./components/Menu";
 
-//import { window } from "@neutralinojs/lib";
+import { loadProjects } from "./files/store";
 
 import "./css/transitionIn.css";
-import ProjectType from "./types/ProjectType";
+import AddProject from "./components/AddProject";
+import { ProjectArrayType } from "./types/ProjectType";
+//import ProjectType from "./types/ProjectType";
 
 function App() {
   const [date, setDate] = useState(new Date());
 
-  const [projects, setProjects] = useState<ProjectType[]>([
+  const [projects, setProjects] = useState<ProjectArrayType>([]);
+
+  const [addProject, setAddProject] = useState(false);
+
+  /*const [projects, setProjects] = useState<ProjectType[]>([
     { id: "1", name: "adesso Staffing Advisor", color: "#1976d2" },
     { id: "2", name: "CC", color: "#8119d2" },
-  ]);
+  ]);*/
+
+  useEffect(() => {
+    console.log("LADE INFOS");
+    loadProjects().then((projects) => {
+      setProjects(projects);
+      if (projects.length == 0) {
+        setAddProject(true);
+      }
+    });
+  }, []);
 
   const [startTimer, setStartTimer] = useState(false);
   const [sessionButtonLabel, setSessionButtonLabel] =
@@ -54,7 +70,11 @@ function App() {
           width: "100%",
         }}
       >
-        <Menu projects={projects} setProjects={setProjects} />
+        <Menu
+          projects={projects}
+          setProjects={setProjects}
+          setAddProject={setAddProject}
+        />
         <Warning />
         <CalendarWeek />
       </div>
@@ -92,6 +112,16 @@ function App() {
       <div style={{ height: "70%", width: "100%" }}>
         <Calendar date={date} setDate={setDate} projects={projects} />
       </div>
+      <AddProject
+        open={addProject}
+        handleClose={() => setAddProject(false)}
+        projects={projects}
+        setProjects={setProjects}
+        handleChange={() => {
+          console.log("hallo");
+        }}
+        exitable={false}
+      />
     </div>
   );
 }

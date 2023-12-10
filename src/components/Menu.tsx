@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Project from "./Project";
 
 import openAdTime from "../files/openAdTime";
-import ProjectType from "../types/ProjectType";
+import { ProjectArrayType } from "../types/ProjectType";
 
 import { exit } from "@tauri-apps/api/process";
 
@@ -27,8 +27,9 @@ const StyledSpeedDial = styled(SpeedDial)(() => ({
 }));
 
 interface Props {
-  projects: ProjectType[];
-  setProjects: (projects: ProjectType[]) => void;
+  projects: ProjectArrayType;
+  setProjects: (projects: ProjectArrayType) => void;
+  setAddProject: (addProjects: boolean) => void;
 }
 
 function Menu(props: Props) {
@@ -114,6 +115,7 @@ function Menu(props: Props) {
         toggleDrawer={toggleDrawerProject}
         projects={props.projects}
         setProjects={props.setProjects}
+        setAddProject={props.setAddProject}
       />
     </div>
   );
