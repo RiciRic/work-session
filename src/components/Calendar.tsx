@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Paper, Divider } from "@mui/material";
 
 import getWeek from "../files/getWeek";
@@ -7,7 +7,12 @@ import Day from "./Day";
 import ProjectPicker from "./ProjectPicker";
 import DatePicker from "./DatePicker";
 import { ProjectArrayType } from "../types/ProjectType";
-import { DataType } from "../types/SessionType";
+import { SessionArrayType } from "../types/SessionType";
+
+import testData from "./testData";
+
+import { loadData } from "../files/store";
+import SessionItem from "./SessionItem";
 
 interface Props {
   projects: ProjectArrayType;
@@ -16,59 +21,58 @@ interface Props {
 }
 
 function Calendar(props: Props) {
-  const [week, setWeek] = React.useState(getWeek(props.date));
+  const [week, setWeek] = useState(getWeek(props.date));
 
-  const [data, setData] = useState<DataType>({
-    monday: [
-      {
-        project: "projekt1",
-        description: "hallo",
-        start: "1",
-        end: "8",
-        color: "#1976d2",
-      },
-      {
-        project: "projekt2",
-        description: "",
-        start: "1",
-        end: "4",
-        color: "#f9b32b",
-      },
-      {
-        project: "projekt1",
-        description: "",
-        start: "1",
-        end: "2",
-        color: "#1976d2",
-      },
-    ],
-    tuesday: [
-      {
-        project: "projekt3",
-        description: "hallo",
-        start: "12",
-        end: "13",
-        color: "#8119d2",
-      },
-    ],
-    wednesday: [],
-    thursday: [
-      {
-        project: "projekt1",
-        description: "hallo",
-        start: "1",
-        end: "6",
-        color: "#1976d2",
-      },
-    ],
-    friday: [],
-    saturday: [],
-    sunday: [],
-  });
+  const [data, setData] = useState<SessionArrayType>([]);
+
+  const [monday, setMonday] = useState<SessionArrayType>([]);
+  const [tuesday, setTuesday] = useState<SessionArrayType>([]);
+  const [wednesday, setWednesday] = useState<SessionArrayType>([]);
+  const [thursday, setThursday] = useState<SessionArrayType>([]);
+  const [friday, setFriday] = useState<SessionArrayType>([]);
+  const [saturday, setSaturday] = useState<SessionArrayType>([]);
+  const [sunday, setSunday] = useState<SessionArrayType>([]);
+
+  const [openSessionItem, setOpenSessionItem] = useState(false);
 
   useEffect(() => {
+    console.log("LADE DATA");
+    /*loadData().then((data: SessionArrayType) => {
+      setData(data);
+    });*/
+    setData(testData);
+  }, []);
+
+  const setWeekData = (week: Date[]) => {
+    setMonday(filterByDate(week[0]));
+    setTuesday(filterByDate(week[1]));
+    setWednesday(filterByDate(week[2]));
+    setThursday(filterByDate(week[3]));
+    setFriday(filterByDate(week[4]));
+    setSaturday(filterByDate(week[5]));
+    setSunday(filterByDate(week[6]));
+  };
+
+  const filterByDate = (date: Date) => {
+    const filteredData = data.filter((sessionType) => {
+      const sessionTypeDate = new Date(sessionType.date);
+      if (sessionTypeDate.getFullYear() == date.getFullYear()) {
+        if (sessionTypeDate.getMonth() == date.getMonth()) {
+          if (sessionTypeDate.getDate() == date.getDate()) {
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+    return filteredData;
+  };
+
+  useEffect(() => {
+    const newWeek = getWeek(props.date);
     setWeek(getWeek(props.date));
-  }, [props.date]);
+    setWeekData(newWeek);
+  }, [props.date, data]);
 
   return (
     <Box
@@ -89,6 +93,7 @@ function Calendar(props: Props) {
       >
         <ProjectPicker projects={props.projects} />
         <DatePicker date={props.date} setDate={props.setDate} />
+        <SessionItem open={openSessionItem} setOpen={setOpenSessionItem} />
       </div>
       <Paper
         sx={{
@@ -102,24 +107,51 @@ function Calendar(props: Props) {
         <div
           style={{
             display: "flex",
-            //flexDirection: "space-evenly",
             borderColor: "gray",
             height: "100%",
           }}
         >
-          <Day date={week[0]} data={data.monday} />
+          <Day
+            date={week[0]}
+            data={monday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
           <Divider orientation="vertical" />
-          <Day date={week[1]} data={data.tuesday} />
+          <Day
+            date={week[1]}
+            data={tuesday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
           <Divider orientation="vertical" />
-          <Day date={week[2]} data={data.wednesday} />
+          <Day
+            date={week[2]}
+            data={wednesday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
           <Divider orientation="vertical" />
-          <Day date={week[3]} data={data.thursday} />
+          <Day
+            date={week[3]}
+            data={thursday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
           <Divider orientation="vertical" />
-          <Day date={week[4]} data={data.friday} />
+          <Day
+            date={week[4]}
+            data={friday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
           <Divider orientation="vertical" />
-          <Day date={week[5]} data={data.saturday} />
+          <Day
+            date={week[5]}
+            data={saturday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
           <Divider orientation="vertical" />
-          <Day date={week[6]} data={data.sunday} />
+          <Day
+            date={week[6]}
+            data={sunday}
+            setOpenSessionItem={setOpenSessionItem}
+          />
         </div>
       </Paper>
     </Box>

@@ -1,19 +1,29 @@
-export type SessionType = {
-  project: string;
-  description: string;
-  start: string;
-  end: string;
-  color: string;
-};
+import z from "zod";
 
-export type DataType = {
-  monday: SessionType[],
-  tuesday: SessionType[],
-  wednesday: SessionType[],
-  thursday: SessionType[],
-  friday: SessionType[],
-  saturday: SessionType[],
-  sunday: SessionType[]
-};
+export const SessionTypeSchema = z.object({
+  id: z.string(),
+  date: z.string(),
+  project: z.string(),
+  description: z.string(),
+  start: z.number(),
+  end: z.number(),
+  color: z.string(),
+});
 
-export default SessionType;
+export type SessionType = z.infer<typeof SessionTypeSchema>;
+
+export const SessionArrayTypeSchema = z.array(SessionTypeSchema).default([]);
+
+export type SessionArrayType = z.infer<typeof SessionArrayTypeSchema>;
+
+export const DataTypeSchema = z.object({
+  monday: SessionArrayTypeSchema,
+  tuesday: SessionArrayTypeSchema,
+  wednesday: SessionArrayTypeSchema,
+  thursday: SessionArrayTypeSchema,
+  friday: SessionArrayTypeSchema,
+  saturday: SessionArrayTypeSchema,
+  sunday: SessionArrayTypeSchema,
+});
+
+export type DataType = z.infer<typeof DataTypeSchema>;

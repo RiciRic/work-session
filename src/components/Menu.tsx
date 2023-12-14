@@ -17,8 +17,6 @@ import { ProjectArrayType } from "../types/ProjectType";
 
 import { exit } from "@tauri-apps/api/process";
 
-import { useTheme } from "@mui/material/styles";
-
 const StyledSpeedDial = styled(SpeedDial)(() => ({
   position: "absolute",
   "& .MuiFab-primary": { width: 36, height: 36 },
@@ -33,7 +31,6 @@ interface Props {
 }
 
 function Menu(props: Props) {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

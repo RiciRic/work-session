@@ -4,10 +4,12 @@
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_autostart::MacosLauncher;
+use simulate::Key;
 
 #[tauri::command]
 #[allow(unused_variables)]
 fn get_path_to_exe() -> String {
+    simulate::key_press(Key::F24);
     match std::env::current_exe() {
         Ok(exe_path) => return exe_path.display().to_string(),
         Err(e) => return "failed to get current exe path: {e}".to_string(),

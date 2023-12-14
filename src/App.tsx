@@ -13,7 +13,10 @@ import { loadProjects } from "./files/store";
 import "./css/transitionIn.css";
 import AddProject from "./components/AddProject";
 import { ProjectArrayType } from "./types/ProjectType";
-//import ProjectType from "./types/ProjectType";
+
+/*import { cacheDir } from "@tauri-apps/api/path";
+const cacheDirPath = await cacheDir();
+console.log(cacheDirPath);*/
 
 function App() {
   const [date, setDate] = useState(new Date());

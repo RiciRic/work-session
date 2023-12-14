@@ -1,5 +1,6 @@
 import { Store } from "tauri-plugin-store-api";
-import ProjectType, { ProjectArrayType, ProjectArraySchema } from "../types/ProjectType";
+import { ProjectArrayType, ProjectArraySchema } from "../types/ProjectType";
+import { SessionArrayType, SessionArrayTypeSchema } from "../types/SessionType";
 
 const store = new Store(".settings.dat");
 
@@ -24,11 +25,29 @@ export async function loadProjects() {
     return projects;
   } catch (error) {
     let projects: ProjectArrayType = [];
-    return projects
+    return projects;
   }
 }
 
-export async function saveProjects( projects: ProjectArrayType) {
+export async function saveProjects(projects: ProjectArrayType) {
   await store.set("projects", projects);
+  await store.save();
+}
+
+export async function loadData() {
+  try {
+    let data: SessionArrayType = SessionArrayTypeSchema.parse(
+      await store.get("data")
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
+    let data: SessionArrayType = [];
+    return data;
+  }
+}
+
+export async function saveData(data: SessionArrayType) {
+  await store.set("data", data);
   await store.save();
 }

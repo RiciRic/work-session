@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Divider, Typography } from "@mui/material";
+import { Divider, Typography, MenuItem } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
-import SessionType, { DataType } from "../types/SessionType";
+import { SessionArrayType, SessionType } from "../types/SessionType";
 
 interface Props {
   date: Date;
-  data: any;
+  data: SessionArrayType;
+  setOpenSessionItem: (setOpenSessionItem: boolean) => void;
 }
 
 function Day(props: Props) {
@@ -30,11 +31,15 @@ function Day(props: Props) {
   const handleWorkedHours = () => {
     let count = 0;
 
-    props.data.forEach((value: any) => {
-      const difference = value.end - value.start;
-      count = count + difference;
+    props.data.forEach((value: SessionType) => {
+      count = count + getDifference(value.start, value.end);
     });
     return count;
+  };
+
+  const getDifference = (start: number, end: number) => {
+    const difference = end - start;
+    return Math.round(difference / 60 / 60 / 1000);
   };
 
   useEffect(() => {
@@ -79,8 +84,8 @@ function Day(props: Props) {
           </Typography>
         </div>
         <Divider flexItem />
-        {props.data.map((data: any, index: number) => {
-          const difference = data.end - data.start;
+        {props.data.map((data: SessionType, index: number) => {
+          const difference = getDifference(data.start, data.end);
           return (
             <div
               key={index}
@@ -96,7 +101,21 @@ function Day(props: Props) {
                 color: theme.palette.primary.contrastText,
               }}
             >
-              {difference + "Std."}
+              <MenuItem
+                onClick={() => props.setOpenSessionItem(true)}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  margin: "0px",
+                  padding: "0px",
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "6px",
+                }}
+              >
+                {difference + "Std."}
+              </MenuItem>
             </div>
           );
         })}

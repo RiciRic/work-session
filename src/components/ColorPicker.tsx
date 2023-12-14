@@ -1,5 +1,3 @@
-//import React from "react";
-
 import { MuiColorInput } from "mui-color-input";
 
 import { useTheme } from "@mui/material/styles";

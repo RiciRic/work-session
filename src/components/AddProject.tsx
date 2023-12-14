@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Modal, Box, FormControl, Button, Typography } from "@mui/material";
 
 import OutlinedInput from "@mui/material/OutlinedInput";

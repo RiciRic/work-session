@@ -27,13 +27,15 @@ interface Props {
 function Settings(props: Props) {
   const anchor = "left";
 
-  const [startup, setStartup] = React.useState(true);
+  const [startup, setStartup] = React.useState(false);
 
   const changeAutoStart = async (startup: boolean) => {
     if (startup) {
       await enable();
+      setStartup(true);
     } else {
       disable();
+      setStartup(false);
     }
   };
 
@@ -43,9 +45,11 @@ function Settings(props: Props) {
   };
 
   useEffect(() => {
-    invoke("get_path_to_exe").then((path) => console.log(path));
-    changeAutoStart(startup);
-  }, [startup]);
+    setTimeout(function(){
+      invoke("get_path_to_exe").then((path) => console.log(path));
+      console.log("Executed after 4 second");
+    }, 4000);
+  }, []);
 
   useEffect(() => {
     getAutoStart();
@@ -83,7 +87,7 @@ function Settings(props: Props) {
             control={
               <Switch
                 value={startup}
-                onChange={(event) => setStartup(event.target.checked)}
+                onChange={(event) => changeAutoStart(event.target.checked)}
               />
             }
             label="Beim Hochfahren starten"

@@ -25,6 +25,9 @@
       },
       "process": {
         "all": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
