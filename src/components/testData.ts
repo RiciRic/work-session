@@ -5,8 +5,8 @@ const data = [
   {
     id: "1",
     date: testDate.toISOString(),
-    project: "projekt1",
-    description: "hallo",
+    project: "CC",
+    description: "halloseee",
     start: testDate.getTime(),
     end: new Date(
       testDate2.setTime(new Date().getTime() + 7 * 60 * 60 * 1000)

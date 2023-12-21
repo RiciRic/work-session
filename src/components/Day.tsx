@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Divider, Typography, MenuItem } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
@@ -7,7 +7,9 @@ import { SessionArrayType, SessionType } from "../types/SessionType";
 interface Props {
   date: Date;
   data: SessionArrayType;
-  setOpenSessionItem: (setOpenSessionItem: boolean) => void;
+  setOpenSessionItem: (setOpenSessionItem: boolean, data: SessionType) => void;
+  worked: number;
+  setWorked: (worked: number) => void;
 }
 
 function Day(props: Props) {
@@ -27,7 +29,6 @@ function Day(props: Props) {
     highlightTextColor = theme.palette.primary.contrastText;
   }
 
-  const [worked, setWorked] = useState(0);
   const handleWorkedHours = () => {
     let count = 0;
 
@@ -43,7 +44,7 @@ function Day(props: Props) {
   };
 
   useEffect(() => {
-    setWorked(handleWorkedHours());
+    props.setWorked(handleWorkedHours());
   }, [props.data]);
 
   return (
@@ -102,7 +103,7 @@ function Day(props: Props) {
               }}
             >
               <MenuItem
-                onClick={() => props.setOpenSessionItem(true)}
+                onClick={() => props.setOpenSessionItem(true, data)}
                 sx={{
                   display: "flex",
                   justifyContent: "center",
@@ -121,7 +122,7 @@ function Day(props: Props) {
         })}
       </div>
       <Divider flexItem />
-      <Typography>{worked + " Std."}</Typography>
+      <Typography>{props.worked + " Std."}</Typography>
     </div>
   );
 }

@@ -21,6 +21,8 @@ console.log(cacheDirPath);*/
 function App() {
   const [date, setDate] = useState(new Date());
 
+  const [workedHours, setWorkedHours] = useState(0);
+
   const [projects, setProjects] = useState<ProjectArrayType>([]);
 
   const [addProject, setAddProject] = useState(false);
@@ -92,7 +94,8 @@ function App() {
       >
         <Typography variant={"h5"}>
           {"Du hast diese Woche "}
-          {"17 Stunden gearbeitet"}
+          {workedHours}
+          {" Stunden gearbeitet"}
         </Typography>
         <div
           style={{
@@ -113,7 +116,12 @@ function App() {
         </div>
       </div>
       <div style={{ height: "70%", width: "100%" }}>
-        <Calendar date={date} setDate={setDate} projects={projects} />
+        <Calendar
+          date={date}
+          setDate={setDate}
+          projects={projects}
+          setWorkedHours={setWorkedHours}
+        />
       </div>
       <AddProject
         open={addProject}
