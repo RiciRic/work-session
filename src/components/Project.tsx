@@ -41,9 +41,9 @@ function Project(props: Props) {
   const [disabled, setDisabled] = React.useState(true);
 
   const [project, setProject] = React.useState<ProjectType>({
-    id: "1",
-    name: "1",
-    color: "#1e1e1e",
+    id: "",
+    name: "",
+    color: "",
   });
   const [projectId, setProjectId] = React.useState("");
   const [projectName, setProjectName] = React.useState("");

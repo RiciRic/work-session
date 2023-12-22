@@ -49,11 +49,11 @@ function Calendar(props: Props) {
 
   const [openSessionItem, setOpenSessionItem] = useState(false);
   const [sessionItemData, setSessionItemData] = useState<SessionType>({
-    id: "0",
+    id: "",
     date: "",
     description: "",
     project: "",
-    color: "#1e1e1e",
+    color: "",
     start: 0,
     end: 0,
   });
@@ -146,6 +146,9 @@ function Calendar(props: Props) {
           open={openSessionItem}
           setOpen={setOpenSessionItem}
           data={sessionItemData}
+          projects={props.projects}
+          sessionArray={data}
+          setSessionArray={setData}
         />
       </div>
       <Paper

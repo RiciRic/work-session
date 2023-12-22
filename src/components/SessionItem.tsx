@@ -11,22 +11,68 @@ import {
   OutlinedInput,
   Select,
   Divider,
+  MenuItem,
 } from "@mui/material";
-import { SessionType } from "../types/SessionType";
+import { SessionArrayType, SessionType } from "../types/SessionType";
 import ColorPicker from "./ColorPicker";
+import ProjectType, { ProjectArrayType } from "../types/ProjectType";
 
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   data: SessionType;
+  projects: ProjectArrayType;
+  sessionArray: SessionArrayType;
+  setSessionArray: (sessionArray: SessionArrayType) => void;
 }
 
 function SessionItem(props: Props) {
   const [description, setDescription] = React.useState(props.data.description);
-
   const [projectColor, setProjectColor] = React.useState(props.data.color);
+
+  const [projects, setProjects] = React.useState<ProjectArrayType>([]);
+  const [project, setProject] = React.useState({
+    id: "",
+    name: "",
+    color: "",
+  });
+
   const handleClose = () => {
     props.setOpen(false);
+  };
+
+  const handleProjects = () => {
+    let i = 0;
+    while (i < props.projects.length) {
+      if (
+        props.projects[i].name == props.data.project &&
+        props.projects[i].color == props.data.color
+      ) {
+        setProjects([...props.projects]);
+        setProject(props.projects[i]);
+        console.log("es ist passiert");
+        return;
+      }
+      i++;
+    }
+
+    const newProject: ProjectType = {
+      id: "",
+      name: props.data.project,
+      color: props.data.color,
+    };
+    const projects: ProjectArrayType = [newProject, ...props.projects];
+    setProjects(projects);
+    if (projects.length) {
+      setProject(projects[0]);
+    }
+  };
+
+  const handleChange = (value: ProjectType) => {
+    if (value) {
+      setProject(value);
+      setProjectColor(value.color);
+    }
   };
 
   const formatDate = (dateString: number) => {
@@ -41,9 +87,29 @@ function SessionItem(props: Props) {
   };
 
   useEffect(() => {
-    setProjectColor(props.data.color);
     setDescription(props.data.description);
+    setProjectColor(props.data.color);
   }, [props.data]);
+
+  useEffect(() => {
+    if (props.open == true) {
+      handleProjects();
+    }
+  }, [props.open]);
+
+  const handleDelete = () => {
+    const newSessionArray: SessionArrayType = [
+      ...props.sessionArray.filter(
+        (item: SessionType) => item.id !== props.data.id
+      ),
+    ];
+    props.setSessionArray(newSessionArray);
+    handleClose();
+    /*saveProjects(newProjects);
+    if (newProjects.length == 0) {
+      props.setAddProject(true);
+    }*/
+  };
 
   return (
     <>
@@ -70,18 +136,18 @@ function SessionItem(props: Props) {
             <FormControl fullWidth size="small">
               <Select
                 placeholder="Projekt"
-                //value={project}
-                /*onChange={(event) => {
+                value={project}
+                onChange={(event) => {
                   handleChange(event.target.value as ProjectType);
-                }}*/
+                }}
               >
-                {/*props.projects.map((project: any, index: number) => {
+                {projects.map((project: any, index: number) => {
                   return (
                     <MenuItem key={index} value={project}>
                       {project.name}
                     </MenuItem>
                   );
-                })*/}
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
@@ -130,7 +196,7 @@ function SessionItem(props: Props) {
               />
             </FormControl>
             <div style={{ width: "100%" }}>
-              <Button variant="text" color={"error"}>
+              <Button variant="text" color={"error"} onClick={handleDelete}>
                 Session löschen
               </Button>
             </div>

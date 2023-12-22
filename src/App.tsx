@@ -27,11 +27,6 @@ function App() {
 
   const [addProject, setAddProject] = useState(false);
 
-  /*const [projects, setProjects] = useState<ProjectType[]>([
-    { id: "1", name: "adesso Staffing Advisor", color: "#1976d2" },
-    { id: "2", name: "CC", color: "#8119d2" },
-  ]);*/
-
   useEffect(() => {
     console.log("LADE INFOS");
     loadProjects().then((projects) => {

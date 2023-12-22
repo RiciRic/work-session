@@ -14,7 +14,7 @@ const data = [
     color: "#1976d2",
   },
   {
-    id: "1",
+    id: "2",
     date: testDate.toISOString(),
     project: "projekt2",
     description: "",
@@ -25,9 +25,9 @@ const data = [
     color: "#f9b32b",
   },
   {
-    id: "1",
+    id: "3",
     date: testDate.toISOString(),
-    project: "projekt1",
+    project: "adesso Staffing Advisor",
     description: "",
     start: testDate.getTime(),
     end: new Date(
@@ -37,7 +37,7 @@ const data = [
   },
 
   {
-    id: "1",
+    id: "4",
     date: testDate.toISOString(),
     project: "projekt3",
     description: "hallo",
@@ -49,7 +49,7 @@ const data = [
   },
 
   {
-    id: "1",
+    id: "5",
     date: testDate.toISOString(),
     project: "projekt1",
     description: "hallo",
