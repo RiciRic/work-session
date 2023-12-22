@@ -6,7 +6,7 @@ import getWeek from "../files/getWeek";
 import Day from "./Day";
 import ProjectPicker from "./ProjectPicker";
 import DatePicker from "./DatePicker";
-import { ProjectArrayType } from "../types/ProjectType";
+import ProjectType, { ProjectArrayType } from "../types/ProjectType";
 import { SessionArrayType, SessionType } from "../types/SessionType";
 
 import testData from "./testData";
@@ -18,13 +18,15 @@ interface Props {
   projects: ProjectArrayType;
   date: Date;
   setDate: (date: Date) => void;
+  data: SessionArrayType;
+  setData: (data: SessionArrayType) => void;
   setWorkedHours: (hours: number) => void;
+  project: ProjectType;
+  setProject: (project: ProjectType) => void;
 }
 
 function Calendar(props: Props) {
   const [week, setWeek] = useState(getWeek(props.date));
-
-  const [data, setData] = useState<SessionArrayType>([]);
 
   const [monday, setMonday] = useState<SessionArrayType>([]);
   const [workedMonday, setWorkedMonday] = useState(0);
@@ -79,14 +81,6 @@ function Calendar(props: Props) {
     workedSunday,
   ]);
 
-  useEffect(() => {
-    console.log("LADE DATA");
-    /*loadData().then((data: SessionArrayType) => {
-      setData(data);
-    });*/
-    setData(testData);
-  }, []);
-
   const setWeekData = (week: Date[]) => {
     setMonday(filterByDate(week[0]));
     setTuesday(filterByDate(week[1]));
@@ -98,7 +92,7 @@ function Calendar(props: Props) {
   };
 
   const filterByDate = (date: Date) => {
-    const filteredData = data.filter((sessionType) => {
+    const filteredData = props.data.filter((sessionType) => {
       const sessionTypeDate = new Date(sessionType.date);
       if (sessionTypeDate.getFullYear() == date.getFullYear()) {
         if (sessionTypeDate.getMonth() == date.getMonth()) {
@@ -116,7 +110,7 @@ function Calendar(props: Props) {
     const newWeek = getWeek(props.date);
     setWeek(getWeek(props.date));
     setWeekData(newWeek);
-  }, [props.date, data]);
+  }, [props.date, props.data]);
 
   const handleSetOpenSessionItem = (open: boolean, data: SessionType) => {
     setOpenSessionItem(open);
@@ -140,15 +134,19 @@ function Calendar(props: Props) {
           justifyContent: "space-between",
         }}
       >
-        <ProjectPicker projects={props.projects} />
+        <ProjectPicker
+          projects={props.projects}
+          project={props.project}
+          setProject={props.setProject}
+        />
         <DatePicker date={props.date} setDate={props.setDate} />
         <SessionItem
           open={openSessionItem}
           setOpen={setOpenSessionItem}
           data={sessionItemData}
           projects={props.projects}
-          sessionArray={data}
-          setSessionArray={setData}
+          sessionArray={props.data}
+          setSessionArray={props.setData}
         />
       </div>
       <Paper

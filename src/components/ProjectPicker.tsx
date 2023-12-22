@@ -1,22 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FormControl, Select, MenuItem } from "@mui/material";
-import { ProjectArrayType } from "../types/ProjectType";
+import ProjectType, { ProjectArrayType } from "../types/ProjectType";
 
 interface Props {
   projects: ProjectArrayType;
+  project: ProjectType;
+  setProject: (project: ProjectType) => void;
 }
 
 function ProjectPicker(props: Props) {
-  const [project, setProject] = React.useState(0);
-
-  const handleChange = (event: any) => {
-    setProject(event.target.value);
+  const handleChange = (value: ProjectType) => {
+    props.setProject(value);
   };
+
+  useEffect(() => {
+    if (props.projects.length > 0) {
+      handleChange(props.projects[0]);
+    }
+  }, [props.projects]);
 
   return (
     <FormControl size="small">
-      <Select placeholder="Projekt" value={project} onChange={handleChange}>
-        {props.projects.map((project: any, index: number) => {
+      <Select
+        placeholder="Projekt"
+        value={props.project}
+        onChange={(event) => {
+          const value = event.target.value as ProjectType;
+          handleChange(value);
+        }}
+      >
+        {props.projects.map((project: ProjectType, index: number) => {
           return (
             <MenuItem key={index} value={index}>
               {project.name}

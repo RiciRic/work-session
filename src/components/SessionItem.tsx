@@ -31,13 +31,18 @@ function SessionItem(props: Props) {
   const [projectColor, setProjectColor] = React.useState(props.data.color);
 
   const [projects, setProjects] = React.useState<ProjectArrayType>([]);
-  const [project, setProject] = React.useState({
+
+  const init: ProjectType = {
     id: "",
     name: "",
     color: "",
-  });
+  };
+  const [project, setProject] = React.useState(init);
+
+  const [saveDisabled, setSaveDisabled] = React.useState(true);
 
   const handleClose = () => {
+    setProject(init);
     props.setOpen(false);
   };
 
@@ -87,6 +92,7 @@ function SessionItem(props: Props) {
   };
 
   useEffect(() => {
+    //handleProjects();
     setDescription(props.data.description);
     setProjectColor(props.data.color);
   }, [props.data]);
@@ -97,6 +103,10 @@ function SessionItem(props: Props) {
     }
   }, [props.open]);
 
+  useEffect(() => {
+    setSaveDisabled(false);
+  }, [description, projectColor, project]);
+
   const handleDelete = () => {
     const newSessionArray: SessionArrayType = [
       ...props.sessionArray.filter(
@@ -104,11 +114,24 @@ function SessionItem(props: Props) {
       ),
     ];
     props.setSessionArray(newSessionArray);
-    handleClose();
     /*saveProjects(newProjects);
     if (newProjects.length == 0) {
       props.setAddProject(true);
     }*/
+    handleClose();
+  };
+
+  const handleSave = () => {
+    let arrayToChange: SessionArrayType = [...props.sessionArray];
+    let elementToChange: any = arrayToChange.find(
+      (x: SessionType) => x.id === props.data.id
+    );
+    elementToChange.project = project.name;
+    elementToChange.description = description;
+    elementToChange.color = projectColor;
+    props.setSessionArray(arrayToChange);
+    //saveProjects(arrayToChange);
+    handleClose();
   };
 
   return (
@@ -203,9 +226,9 @@ function SessionItem(props: Props) {
             <Divider flexItem />
             <div>
               <Button
-                disabled={true}
+                disabled={saveDisabled}
                 variant="contained"
-                //onClick={handleAddProject}
+                onClick={handleSave}
               >
                 speichern
               </Button>

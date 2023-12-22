@@ -12,7 +12,10 @@ import { loadProjects } from "./files/store";
 
 import "./css/transitionIn.css";
 import AddProject from "./components/AddProject";
-import { ProjectArrayType } from "./types/ProjectType";
+import ProjectType, { ProjectArrayType } from "./types/ProjectType";
+import { SessionArrayType, SessionType } from "./types/SessionType";
+import createUniqueId from "./files/createUniqueId";
+import testData from "./components/testData";
 
 /*import { cacheDir } from "@tauri-apps/api/path";
 const cacheDirPath = await cacheDir();
@@ -24,6 +27,13 @@ function App() {
   const [workedHours, setWorkedHours] = useState(0);
 
   const [projects, setProjects] = useState<ProjectArrayType>([]);
+  const [project, setProject] = useState<ProjectType>({
+    id: "",
+    name: "",
+    color: "",
+  });
+
+  const [data, setData] = useState<SessionArrayType>([]);
 
   const [addProject, setAddProject] = useState(false);
 
@@ -37,6 +47,14 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    console.log("LADE DATA");
+    /*loadData().then((data: SessionArrayType) => {
+      setData(data);
+    });*/
+    setData(testData);
+  }, []);
+
   const [startTimer, setStartTimer] = useState(false);
   const [sessionButtonLabel, setSessionButtonLabel] =
     useState("Session starten");
@@ -45,11 +63,28 @@ function App() {
     if (startTimer) {
       setStartTimer(!startTimer);
       setSessionButtonLabel("Session starten");
+      handleAddSessionItem();
     } else {
       setStartTimer(!startTimer);
       setSessionButtonLabel("Session beenden");
       //window.hide();
     }
+  };
+
+  const handleAddSessionItem = () => {
+    const sessionDate = new Date();
+    const newSession: SessionType = {
+      id: createUniqueId(),
+      date: sessionDate.toISOString(),
+      project: project.name,
+      description: "",
+      start: sessionDate.getTime(),
+      end: sessionDate.getTime(),
+      color: project.color,
+    };
+    const newData: SessionArrayType = [...data, newSession];
+    setData(newData);
+    //saveProjects(newProjects);
   };
 
   return (
@@ -114,8 +149,12 @@ function App() {
         <Calendar
           date={date}
           setDate={setDate}
+          data={data}
+          setData={setData}
           projects={projects}
           setWorkedHours={setWorkedHours}
+          project={project}
+          setProject={setProject}
         />
       </div>
       <AddProject

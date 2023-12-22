@@ -87,6 +87,12 @@ function Day(props: Props) {
         <Divider flexItem />
         {props.data.map((data: SessionType, index: number) => {
           const difference = getDifference(data.start, data.end);
+          let height = "";
+          if (difference < 1) {
+            height = "10%";
+          } else {
+            height = difference + "0%";
+          }
           return (
             <div
               key={index}
@@ -94,7 +100,7 @@ function Day(props: Props) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: difference + "0%",
+                height: height,
                 width: "90%",
                 margin: "2px",
                 backgroundColor: data.color,
