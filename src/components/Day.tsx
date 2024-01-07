@@ -3,6 +3,7 @@ import { Divider, Typography, MenuItem } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
 import { SessionArrayType, SessionType } from "../types/SessionType";
+import SessionItem from "./SessionItem";
 
 interface Props {
   date: Date;
@@ -10,6 +11,7 @@ interface Props {
   setOpenSessionItem: (setOpenSessionItem: boolean, data: SessionType) => void;
   worked: number;
   setWorked: (worked: number) => void;
+  currentSessionId: string;
 }
 
 function Day(props: Props) {
@@ -94,36 +96,14 @@ function Day(props: Props) {
             height = difference + "0%";
           }
           return (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: height,
-                width: "90%",
-                margin: "2px",
-                backgroundColor: data.color,
-                borderRadius: "6px",
-                color: theme.palette.primary.contrastText,
-              }}
-            >
-              <MenuItem
-                onClick={() => props.setOpenSessionItem(true, data)}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  margin: "0px",
-                  padding: "0px",
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: "6px",
-                }}
-              >
-                {difference + "Std."}
-              </MenuItem>
-            </div>
+            <SessionItem
+              index={index}
+              setOpenSessionItem={props.setOpenSessionItem}
+              height={height}
+              difference={difference}
+              data={data}
+              currentSessionId={props.currentSessionId}
+            />
           );
         })}
       </div>

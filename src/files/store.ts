@@ -1,6 +1,7 @@
 import { Store } from "tauri-plugin-store-api";
 import { ProjectArrayType, ProjectArraySchema } from "../types/ProjectType";
 import { SessionArrayType, SessionArrayTypeSchema } from "../types/SessionType";
+import { SettingsType, SettingsTypeSchema } from "../types/SettingsType";
 
 const store = new Store(".settings.dat");
 
@@ -49,5 +50,27 @@ export async function loadData() {
 
 export async function saveData(data: SessionArrayType) {
   await store.set("data", data);
+  await store.save();
+}
+
+export const defaultSettings: SettingsType = {
+  sessionStartHideToTray: true,
+  forceUnlock: false,
+};
+
+export async function loadSettings() {
+  try {
+    let settings: SettingsType = SettingsTypeSchema.parse(
+      await store.get("settings")
+    );
+    console.log(settings);
+    return settings;
+  } catch (error) {
+    return defaultSettings;
+  }
+}
+
+export async function saveSettings(settings: SettingsType) {
+  await store.set("settings", settings);
   await store.save();
 }

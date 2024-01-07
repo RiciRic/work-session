@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { Button, Typography } from "@mui/material";
 import CalendarWeek from "./components/CalendarWeek";
@@ -8,34 +8,43 @@ import Warning from "./components/Warning";
 import Timer from "./components/Timer";
 import Menu from "./components/Menu";
 
-import { loadProjects } from "./files/store";
+import {
+  defaultSettings,
+  loadData,
+  loadProjects,
+  loadSettings,
+  saveData,
+} from "./files/store";
 
 import "./css/transitionIn.css";
 import AddProject from "./components/AddProject";
 import ProjectType, { ProjectArrayType } from "./types/ProjectType";
-import { SessionArrayType, SessionType } from "./types/SessionType";
-import createUniqueId from "./files/createUniqueId";
-import testData from "./components/testData";
+import { SessionArrayType } from "./types/SessionType";
 
-/*import { cacheDir } from "@tauri-apps/api/path";
-const cacheDirPath = await cacheDir();
-console.log(cacheDirPath);*/
+import { SettingsType } from "./types/SettingsType";
+import SessionButton from "./components/SessionButton";
 
 function App() {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = React.useState(new Date());
 
-  const [workedHours, setWorkedHours] = useState(0);
+  const [workedHours, setWorkedHours] = React.useState(0);
 
-  const [projects, setProjects] = useState<ProjectArrayType>([]);
-  const [project, setProject] = useState<ProjectType>({
+  const [projects, setProjects] = React.useState<ProjectArrayType>([]);
+  const [project, setProject] = React.useState<ProjectType>({
     id: "",
     name: "",
     color: "",
   });
 
-  const [data, setData] = useState<SessionArrayType>([]);
+  const [data, setData] = React.useState<SessionArrayType>([]);
 
-  const [addProject, setAddProject] = useState(false);
+  const [settings, setSettings] = React.useState<SettingsType>({
+    ...defaultSettings,
+  });
+
+  const [addProject, setAddProject] = React.useState(false);
+
+  const [currentSessionId, setCurrentSessionId] = React.useState("");
 
   useEffect(() => {
     console.log("LADE INFOS");
@@ -43,49 +52,20 @@ function App() {
       setProjects(projects);
       if (projects.length == 0) {
         setAddProject(true);
+      } else {
+        setProject(projects[0]);
       }
     });
-  }, []);
-
-  useEffect(() => {
     console.log("LADE DATA");
-    /*loadData().then((data: SessionArrayType) => {
+    loadData().then((data: SessionArrayType) => {
       setData(data);
-    });*/
-    setData(testData);
+    });
+    console.log("LADE Settings");
+    loadSettings().then((settings: SettingsType) => {
+      setSettings(settings);
+      console.log(settings);
+    });
   }, []);
-
-  const [startTimer, setStartTimer] = useState(false);
-  const [sessionButtonLabel, setSessionButtonLabel] =
-    useState("Session starten");
-
-  const startStopSession = () => {
-    if (startTimer) {
-      setStartTimer(!startTimer);
-      setSessionButtonLabel("Session starten");
-      handleAddSessionItem();
-    } else {
-      setStartTimer(!startTimer);
-      setSessionButtonLabel("Session beenden");
-      //window.hide();
-    }
-  };
-
-  const handleAddSessionItem = () => {
-    const sessionDate = new Date();
-    const newSession: SessionType = {
-      id: createUniqueId(),
-      date: sessionDate.toISOString(),
-      project: project.name,
-      description: "",
-      start: sessionDate.getTime(),
-      end: sessionDate.getTime(),
-      color: project.color,
-    };
-    const newData: SessionArrayType = [...data, newSession];
-    setData(newData);
-    //saveProjects(newProjects);
-  };
 
   return (
     <div
@@ -109,6 +89,8 @@ function App() {
           projects={projects}
           setProjects={setProjects}
           setAddProject={setAddProject}
+          settings={settings}
+          setSettings={setSettings}
         />
         <Warning />
         <CalendarWeek />
@@ -127,23 +109,14 @@ function App() {
           {workedHours}
           {" Stunden gearbeitet"}
         </Typography>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            variant="contained"
-            onClick={() => {
-              startStopSession();
-            }}
-          >
-            {sessionButtonLabel}
-          </Button>
-          <Timer start={startTimer} />
-        </div>
+        <SessionButton
+          data={data}
+          setData={setData}
+          settings={settings}
+          project={project}
+          currentSessionId={currentSessionId}
+          setCurrentSessionId={setCurrentSessionId}
+        />
       </div>
       <div style={{ height: "70%", width: "100%" }}>
         <Calendar
@@ -155,6 +128,7 @@ function App() {
           setWorkedHours={setWorkedHours}
           project={project}
           setProject={setProject}
+          currentSessionId={currentSessionId}
         />
       </div>
       <AddProject

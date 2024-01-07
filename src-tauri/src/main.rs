@@ -1,10 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use simulate::Key;
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_autostart::MacosLauncher;
-use simulate::Key;
 
 #[tauri::command]
 #[allow(unused_variables)]
@@ -76,7 +76,10 @@ fn main() {
             _ => {}
         }) //additional code for tauri
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"]) /* arbitrary number of args to pass to your app */))
+        .plugin(tauri_plugin_autostart::init(
+            MacosLauncher::LaunchAgent,
+            Some(vec!["--flag1", "--flag2"]), /* arbitrary number of args to pass to your app */
+        ))
         .invoke_handler(tauri::generate_handler![get_path_to_exe])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -16,6 +16,7 @@ import openAdTime from "../files/openAdTime";
 import { ProjectArrayType } from "../types/ProjectType";
 
 import { exit } from "@tauri-apps/api/process";
+import { SettingsType } from "../types/SettingsType";
 
 const StyledSpeedDial = styled(SpeedDial)(() => ({
   position: "absolute",
@@ -28,6 +29,8 @@ interface Props {
   projects: ProjectArrayType;
   setProjects: (projects: ProjectArrayType) => void;
   setAddProject: (addProjects: boolean) => void;
+  settings: SettingsType;
+  setSettings: (settings: SettingsType) => void;
 }
 
 function Menu(props: Props) {
@@ -106,7 +109,12 @@ function Menu(props: Props) {
           onClick={() => exit(1)}
         />
       </StyledSpeedDial>
-      <Settings open={openSettings} toggleDrawer={toggleDrawerSettings} />
+      <Settings
+        open={openSettings}
+        toggleDrawer={toggleDrawerSettings}
+        settings={props.settings}
+        setSettings={props.setSettings}
+      />
       <Project
         open={openProject}
         toggleDrawer={toggleDrawerProject}

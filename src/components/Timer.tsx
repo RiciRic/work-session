@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
+import StopIcon from "@mui/icons-material/Stop";
+import { invoke } from "@tauri-apps/api/tauri";
+import { SessionArrayType, SessionType } from "../types/SessionType";
+import { saveData } from "../files/store";
 let interval: any = null;
 let seconds = 0;
 
 interface Props {
   start: boolean;
+  currentSessionId: string;
+  data: SessionArrayType;
+  setData: (data: SessionArrayType) => void;
+  hover: boolean;
 }
 
 function Timer(props: Props) {
@@ -33,6 +40,8 @@ function Timer(props: Props) {
     }
   }, [props.start]);
 
+  useEffect(() => {}, [props.currentSessionId]);
+
   const timer = () => {
     seconds++;
     const hrs = Math.floor(seconds / 3600);
@@ -48,8 +57,22 @@ function Timer(props: Props) {
     if (hrs < 10) hrsString = "0" + hrs;
 
     setTime(hrsString + ":" + minsString + ":" + secsString);
+
+    if (seconds % 60 == 0) {
+      invoke("get_path_to_exe").then((path) => console.log(path));
+    }
+
+    if (seconds % 120 == 0) {
+      let arrayToChange: SessionArrayType = [...props.data];
+      let elementToChange: any = arrayToChange.find(
+        (x: SessionType) => x.id === props.currentSessionId
+      );
+      elementToChange.end = new Date().getTime();
+      props.setData(arrayToChange);
+      saveData(arrayToChange);
+    }
   };
-  return <Typography>{time}</Typography>;
+  return <>{props.hover ? <StopIcon /> : time}</>;
 }
 
 export default Timer;

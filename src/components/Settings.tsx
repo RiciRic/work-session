@@ -15,19 +15,26 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 import { exit } from "@tauri-apps/api/process";
 
-import { invoke } from "@tauri-apps/api/tauri";
-
 import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
+import { SettingsType } from "../types/SettingsType";
+import { saveSettings } from "../files/store";
 
 interface Props {
   open: boolean;
   toggleDrawer: (event: React.KeyboardEvent | React.MouseEvent) => void;
+  settings: SettingsType;
+  setSettings: (settings: SettingsType) => void;
 }
 
 function Settings(props: Props) {
   const anchor = "left";
 
   const [startup, setStartup] = React.useState(false);
+  const [sessionStartHideToTray, setSessionStartHideToTray] =
+    React.useState<boolean>(props.settings.sessionStartHideToTray);
+  const [forceUnlock, setForceUnlock] = React.useState<boolean>(
+    props.settings.forceUnlock
+  );
 
   const changeAutoStart = async (startup: boolean) => {
     if (startup) {
@@ -45,14 +52,8 @@ function Settings(props: Props) {
   };
 
   useEffect(() => {
-    setTimeout(function(){
-      invoke("get_path_to_exe").then((path) => console.log(path));
-      console.log("Executed after 4 second");
-    }, 4000);
-  }, []);
-
-  useEffect(() => {
     getAutoStart();
+    console.log("junge " + props.settings.sessionStartHideToTray);
   }, []);
 
   return (
@@ -69,8 +70,8 @@ function Settings(props: Props) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          width: "250px",
+          marginLeft: "10px",
+          width: "300px",
           height: "100%",
           padding: "6px",
           userSelect: "none",
@@ -95,8 +96,36 @@ function Settings(props: Props) {
         </FormGroup>
         <FormGroup>
           <FormControlLabel
-            control={<Switch defaultChecked />}
+            control={
+              <Switch
+                value={sessionStartHideToTray}
+                onChange={(event) => {
+                  let newSettings: SettingsType = { ...props.settings };
+                  newSettings.sessionStartHideToTray = event.target.checked;
+                  setSessionStartHideToTray(event.target.checked);
+                  props.setSettings(newSettings);
+                  saveSettings(newSettings);
+                }}
+              />
+            }
             label="Fenster beim Session-Start verstecken"
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                value={forceUnlock}
+                onChange={(event) => {
+                  let newSettings: SettingsType = { ...props.settings };
+                  newSettings.forceUnlock = event.target.checked;
+                  setForceUnlock(event.target.checked);
+                  props.setSettings(newSettings);
+                  saveSettings(newSettings);
+                }}
+              />
+            }
+            label="Entsperren erzwingen"
           />
         </FormGroup>
       </Box>

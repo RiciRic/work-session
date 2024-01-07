@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { FormControl, Select, MenuItem } from "@mui/material";
 import ProjectType, { ProjectArrayType } from "../types/ProjectType";
 
@@ -13,12 +12,6 @@ function ProjectPicker(props: Props) {
     props.setProject(value);
   };
 
-  useEffect(() => {
-    if (props.projects.length > 0) {
-      handleChange(props.projects[0]);
-    }
-  }, [props.projects]);
-
   return (
     <FormControl size="small">
       <Select
@@ -29,9 +22,9 @@ function ProjectPicker(props: Props) {
           handleChange(value);
         }}
       >
-        {props.projects.map((project: ProjectType, index: number) => {
+        {props.projects.map((project: any, index: number) => {
           return (
-            <MenuItem key={index} value={index}>
+            <MenuItem key={index} value={project}>
               {project.name}
             </MenuItem>
           );

@@ -9,10 +9,8 @@ import DatePicker from "./DatePicker";
 import ProjectType, { ProjectArrayType } from "../types/ProjectType";
 import { SessionArrayType, SessionType } from "../types/SessionType";
 
-import testData from "./testData";
-
 //import { loadData } from "../files/store";
-import SessionItem from "./SessionItem";
+import SessionItemSettings from "./SessionItemSettings";
 
 interface Props {
   projects: ProjectArrayType;
@@ -23,6 +21,7 @@ interface Props {
   setWorkedHours: (hours: number) => void;
   project: ProjectType;
   setProject: (project: ProjectType) => void;
+  currentSessionId: string;
 }
 
 function Calendar(props: Props) {
@@ -140,7 +139,7 @@ function Calendar(props: Props) {
           setProject={props.setProject}
         />
         <DatePicker date={props.date} setDate={props.setDate} />
-        <SessionItem
+        <SessionItemSettings
           open={openSessionItem}
           setOpen={setOpenSessionItem}
           data={sessionItemData}
@@ -171,6 +170,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedMonday}
             setWorked={setWorkedMonday}
+            currentSessionId={props.currentSessionId}
           />
           <Divider orientation="vertical" />
           <Day
@@ -179,6 +179,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedTuesday}
             setWorked={setWorkedTuesday}
+            currentSessionId={props.currentSessionId}
           />
           <Divider orientation="vertical" />
           <Day
@@ -187,6 +188,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedWednesday}
             setWorked={setWorkedWednesday}
+            currentSessionId={props.currentSessionId}
           />
           <Divider orientation="vertical" />
           <Day
@@ -195,6 +197,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedThursday}
             setWorked={setWorkedThursday}
+            currentSessionId={props.currentSessionId}
           />
           <Divider orientation="vertical" />
           <Day
@@ -203,6 +206,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedFriday}
             setWorked={setWorkedFriday}
+            currentSessionId={props.currentSessionId}
           />
           <Divider orientation="vertical" />
           <Day
@@ -211,6 +215,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedSaturday}
             setWorked={setWorkedSaturday}
+            currentSessionId={props.currentSessionId}
           />
           <Divider orientation="vertical" />
           <Day
@@ -219,6 +224,7 @@ function Calendar(props: Props) {
             setOpenSessionItem={handleSetOpenSessionItem}
             worked={workedSunday}
             setWorked={setWorkedSunday}
+            currentSessionId={props.currentSessionId}
           />
         </div>
       </Paper>
