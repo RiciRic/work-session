@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Divider, Typography, MenuItem } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
 import { SessionArrayType, SessionType } from "../types/SessionType";
@@ -42,7 +42,19 @@ function Day(props: Props) {
 
   const getDifference = (start: number, end: number) => {
     const difference = end - start;
-    return Math.round(difference / 60 / 60 / 1000);
+    const format = difference / 60 / 60 / 1000;
+    const stringFormatArray = (format + "").split(".");
+    const stringFormat = parseInt(stringFormatArray[0]);
+    const decimalPlace = parseFloat("0." + stringFormatArray[1]);
+    if (decimalPlace >= 0.15 && decimalPlace < 0.35) {
+      return stringFormat + 0.25;
+    } else if (decimalPlace >= 0.35 && decimalPlace < 0.6) {
+      return stringFormat + 0.5;
+    } else if (decimalPlace >= 0.6 && decimalPlace < 0.9) {
+      return stringFormat + 0.75;
+    } else {
+      return stringFormat;
+    }
   };
 
   useEffect(() => {
@@ -97,6 +109,7 @@ function Day(props: Props) {
           }
           return (
             <SessionItem
+              key={index}
               index={index}
               setOpenSessionItem={props.setOpenSessionItem}
               height={height}

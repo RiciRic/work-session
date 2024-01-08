@@ -21,8 +21,6 @@ interface Props {
 }
 
 function SessionButton(props: Props) {
-  const sessionButtonLabel = "Session starten";
-
   const [variant, setVariant] = React.useState<
     "contained" | "outlined" | "text"
   >("contained");
@@ -33,11 +31,11 @@ function SessionButton(props: Props) {
 
   const startStopSession = async () => {
     if (startTimer) {
-      setStartTimer(!startTimer);
+      setStartTimer(false);
       setVariant("contained");
       props.setCurrentSessionId("");
     } else {
-      setStartTimer(!startTimer);
+      setStartTimer(true);
       setVariant("outlined");
       handleAddSessionItem();
       setHover(false);
@@ -92,17 +90,13 @@ function SessionButton(props: Props) {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {startTimer ? (
-            <Timer
-              start={startTimer}
-              currentSessionId={props.currentSessionId}
-              data={props.data}
-              setData={props.setData}
-              hover={hover}
-            />
-          ) : (
-            sessionButtonLabel
-          )}
+          <Timer
+            start={startTimer}
+            currentSessionId={props.currentSessionId}
+            data={props.data}
+            setData={props.setData}
+            hover={hover}
+          />
         </Button>
       </div>
     </>

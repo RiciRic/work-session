@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import CalendarWeek from "./components/CalendarWeek";
 import Calendar from "./components/Calendar";
 
 import Warning from "./components/Warning";
-import Timer from "./components/Timer";
 import Menu from "./components/Menu";
 
 import {
@@ -13,7 +12,6 @@ import {
   loadData,
   loadProjects,
   loadSettings,
-  saveData,
 } from "./files/store";
 
 import "./css/transitionIn.css";
@@ -47,7 +45,6 @@ function App() {
   const [currentSessionId, setCurrentSessionId] = React.useState("");
 
   useEffect(() => {
-    console.log("LADE INFOS");
     loadProjects().then((projects) => {
       setProjects(projects);
       if (projects.length == 0) {
@@ -56,14 +53,11 @@ function App() {
         setProject(projects[0]);
       }
     });
-    console.log("LADE DATA");
     loadData().then((data: SessionArrayType) => {
       setData(data);
     });
-    console.log("LADE Settings");
     loadSettings().then((settings: SettingsType) => {
       setSettings(settings);
-      console.log(settings);
     });
   }, []);
 

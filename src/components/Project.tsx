@@ -53,7 +53,6 @@ function Project(props: Props) {
   const [addProject, setAddProject] = React.useState(false);
 
   const handleChange = (value: ProjectType) => {
-    console.log(value);
     if (value) {
       setProject(value);
       setProjectId(value.id);
@@ -72,12 +71,6 @@ function Project(props: Props) {
       }
     }
   }, [props.projects]);
-
-  useEffect(() => {}, [projectName]);
-
-  useEffect(() => {
-    console.log(projectColor);
-  }, [projectColor, projectColor]);
 
   const handleSave = (event: React.KeyboardEvent | React.MouseEvent) => {
     let arrayToChange: ProjectArrayType = [...props.projects];

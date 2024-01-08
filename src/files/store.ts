@@ -22,7 +22,6 @@ export async function loadProjects() {
     let projects: ProjectArrayType = ProjectArraySchema.parse(
       await store.get("projects")
     );
-    console.log(projects);
     return projects;
   } catch (error) {
     let projects: ProjectArrayType = [];
@@ -40,7 +39,6 @@ export async function loadData() {
     let data: SessionArrayType = SessionArrayTypeSchema.parse(
       await store.get("data")
     );
-    console.log(data);
     return data;
   } catch (error) {
     let data: SessionArrayType = [];
@@ -63,7 +61,6 @@ export async function loadSettings() {
     let settings: SettingsType = SettingsTypeSchema.parse(
       await store.get("settings")
     );
-    console.log(settings);
     return settings;
   } catch (error) {
     return defaultSettings;

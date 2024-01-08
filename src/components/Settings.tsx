@@ -53,7 +53,6 @@ function Settings(props: Props) {
 
   useEffect(() => {
     getAutoStart();
-    console.log("junge " + props.settings.sessionStartHideToTray);
   }, []);
 
   return (

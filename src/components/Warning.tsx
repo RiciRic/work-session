@@ -33,9 +33,7 @@ function Warning() {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    console.log("year: " + year + ", month: " + month, ", day: ", day);
     const numberMonth = getNumberMonth(year, month);
-    console.log("numberMonth: " + numberMonth);
     if (day >= numberMonth - 3) {
       const days = numberMonth - day;
       setDaysUntilEndOfMonth(days);
@@ -43,12 +41,18 @@ function Warning() {
         setDaysLabel("Tag");
       }
       setShow(true);
-      createNotification("Stundenfreigabe", "Nur noch " + days + " " + daysLabel + " bis zum neuen Monat!")
+      createNotification(
+        "Stundenfreigabe",
+        "Nur noch " + days + " " + daysLabel + " bis zum neuen Monat!"
+      );
     } else {
       const week = getWeek(date);
       if (day >= week[4].getDate()) {
         setShowBeforeWeekend(true);
-        createNotification("Stundenfreigabe", "Nicht vergessen die Stunden freizugeben!")
+        createNotification(
+          "Stundenfreigabe",
+          "Nicht vergessen die Stunden freizugeben!"
+        );
       }
     }
   };

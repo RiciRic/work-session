@@ -25,6 +25,7 @@ function Timer(props: Props) {
   };
 
   const handleStop = () => {
+    console.log("STOPPP");
     clearInterval(interval);
     if (time !== "00:00:00") {
       console.log("Timer Stop: " + time);
@@ -72,7 +73,9 @@ function Timer(props: Props) {
       saveData(arrayToChange);
     }
   };
-  return <>{props.hover ? <StopIcon /> : time}</>;
+  return (
+    <>{props.start ? props.hover ? <StopIcon /> : time : "Session starten"}</>
+  );
 }
 
 export default Timer;

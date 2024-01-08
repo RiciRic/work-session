@@ -18,6 +18,9 @@ import ColorPicker from "./ColorPicker";
 import ProjectType, { ProjectArrayType } from "../types/ProjectType";
 import { saveData } from "../files/store";
 
+import MergeIcon from "@mui/icons-material/Merge";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -30,6 +33,8 @@ interface Props {
 function SessionItemSettings(props: Props) {
   const [description, setDescription] = React.useState(props.data.description);
   const [projectColor, setProjectColor] = React.useState(props.data.color);
+
+  const [difference, setDifference] = React.useState("");
 
   const [projects, setProjects] = React.useState<ProjectArrayType>([]);
 
@@ -56,7 +61,6 @@ function SessionItemSettings(props: Props) {
       ) {
         setProjects([...props.projects]);
         setProject(props.projects[i]);
-        console.log("es ist passiert");
         return;
       }
       i++;
@@ -86,17 +90,33 @@ function SessionItemSettings(props: Props) {
     return (
       date.toLocaleDateString() +
       " • " +
-      date.getHours() +
+      addZeroIfLowerTen(date.getHours()) +
       ":" +
-      date.getMinutes()
+      addZeroIfLowerTen(date.getMinutes())
     );
   };
 
+  const addZeroIfLowerTen = (number: number) => {
+    let numberString = "" + number;
+    if (number < 10) numberString = "0" + number;
+    return numberString;
+  };
+
   useEffect(() => {
-    //handleProjects();
     setDescription(props.data.description);
     setProjectColor(props.data.color);
+    setDifference(getDifference(props.data.start, props.data.end));
   }, [props.data]);
+
+  const getDifference = (start: number, end: number) => {
+    const difference = end - start;
+    const format = new Date(difference);
+    return (
+      addZeroIfLowerTen(format.getHours() - 1) +
+      ":" +
+      addZeroIfLowerTen(format.getMinutes())
+    );
+  };
 
   useEffect(() => {
     if (props.open == true) {
@@ -185,28 +205,54 @@ function SessionItemSettings(props: Props) {
             <div
               style={{
                 display: "flex",
-                gap: "6px",
+                gap: "12px",
                 alignItems: "center",
                 width: "100%",
               }}
             >
-              <Typography variant="body1">{"Start:"}</Typography>
-              <Typography variant="subtitle1">
-                {formatDate(props.data.start)}
-              </Typography>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                gap: "6px",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Typography variant="body1">{"Ende:"}</Typography>
-              <Typography variant="subtitle1">
-                {formatDate(props.data.end)}
-              </Typography>
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "6px",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography variant="body1">{"Start:"}</Typography>
+                  <Typography variant="subtitle1">
+                    {formatDate(props.data.start)}
+                  </Typography>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "6px",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography variant="body1">{"Ende:"}</Typography>
+                  <Typography variant="subtitle1">
+                    {formatDate(props.data.end)}
+                  </Typography>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "2px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MergeIcon
+                  fontSize="medium"
+                  sx={{ transform: "rotate(90deg)" }}
+                />
+                <Typography variant="subtitle1">{difference}</Typography>
+                <AccessTimeIcon fontSize="small" />
+              </div>
             </div>
             <FormControl sx={{ width: "100%" }}>
               <FormHelperText>{"Projektfarbe"}</FormHelperText>
