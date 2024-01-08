@@ -78,7 +78,15 @@ function Settings(props: Props) {
           gap: "6px",
         }}
       >
-        <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            gap: "6px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <SettingsIcon fontSize={"small"} />
           <Typography>Einstellungen</Typography>
         </div>
@@ -87,7 +95,7 @@ function Settings(props: Props) {
           <FormControlLabel
             control={
               <Switch
-                value={startup}
+                checked={startup}
                 onChange={(event) => changeAutoStart(event.target.checked)}
               />
             }
@@ -98,7 +106,7 @@ function Settings(props: Props) {
           <FormControlLabel
             control={
               <Switch
-                value={sessionStartHideToTray}
+                checked={sessionStartHideToTray}
                 onChange={(event) => {
                   let newSettings: SettingsType = { ...props.settings };
                   newSettings.sessionStartHideToTray = event.target.checked;
@@ -115,7 +123,7 @@ function Settings(props: Props) {
           <FormControlLabel
             control={
               <Switch
-                value={forceUnlock}
+                checked={forceUnlock}
                 onChange={(event) => {
                   let newSettings: SettingsType = { ...props.settings };
                   newSettings.forceUnlock = event.target.checked;
