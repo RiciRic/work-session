@@ -86,7 +86,7 @@ function SessionButton(props: Props) {
           onClick={() => {
             startStopSession();
           }}
-          sx={{ borderRadius: "30px", width: "180px", height: "46px" }}
+          sx={{ borderRadius: "30px", width: "190px", height: "50px" }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
