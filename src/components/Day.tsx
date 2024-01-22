@@ -104,8 +104,10 @@ function Day(props: Props) {
           let height = "";
           if (difference < 1) {
             height = "10%";
+          } else if(difference > 10) {
+            height = "100%";
           } else {
-            height = difference + "0%";
+            height = (difference + "").split(".")[0] + "0%";
           }
           return (
             <SessionItem
